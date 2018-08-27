@@ -2,7 +2,7 @@
 
 Node cli script to load responses into OSCAR
 
-Requires node.js (~v8.11.4) and npm (~) be installed.
+Requires node.js (\~v8.11.4) and npm (\~v5.6.0) be installed.
 
 Requires AWS keys set in environment variables. Get these from OSCAR team.
 
