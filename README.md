@@ -27,5 +27,5 @@ Options:
 
 Examples:
 
-    $ oscarload -t my_tenant -s my_section -i my_item -d /path/to/responses
-    $ oscarload -t my_tenant -s my_section -i my_item -l
+    $ oscarload -a my_account -t my_tenant -s my_section -i my_item -d /path/to/responses
+    $ oscarload -a my_account -t my_tenant -s my_section -i my_item -l

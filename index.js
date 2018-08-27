@@ -11,6 +11,7 @@ const prefix = "responses/v3prod/"
 
 program
     .version('0.1.0')
+    .option('-a, --account [a]', 'Account ID')
     .option('-t, --tenant [a]', 'Tenant RefID')
     .option('-s, --section [a]', 'Section RefID')
     .option('-i, --item [a]', 'Item RefID')
@@ -20,8 +21,8 @@ program
 program.on('--help', function () {
     console.log('  Examples:');
     console.log('');
-    console.log('    $ oscarload -t my_tenant -s my_section -i my_item -d /path/to/responses');
-    console.log('    $ oscarload -t my_tenant -s my_section -i my_item -l');
+    console.log('    $ oscarload -a my_account -t my_tenant -s my_section -i my_item -d /path/to/responses');
+    console.log('    $ oscarload -a my_account -t my_tenant -s my_section -i my_item -l');
     console.log('');
 });
 
@@ -36,7 +37,7 @@ if (program.list) {
 }
 
 function listResponses() {
-    var responseDir = path.join(prefix, program.tenant, program.section, program.item);
+    var responseDir = path.join(prefix, program.location);
     var params = {
         Bucket: bucket,
         Prefix: responseDir
@@ -69,7 +70,7 @@ function loadDirectory() {
                     process.exit(1);
                 }
 
-                var key = path.join(prefix, program.tenant, program.section, program.item, file_name);
+                var key = path.join(prefix, program.location, file_name);
                 console.log("Loading:", key);
 
                 var params = {
@@ -94,6 +95,10 @@ function loadDirectory() {
 
 
 function validateArgs(program) {
+    if (!program.account) {
+        console.log("Must provide valid account (-a)");
+        process.exit(1);
+    }
     if (!program.tenant) {
         console.log("Must provide valid tenant (-t)");
         process.exit(1);
@@ -111,6 +116,9 @@ function validateArgs(program) {
         process.exit(1);
     }
 
+    program.location = path.join(program.account, program.tenant, program.section, program.item);
+
+    console.log(`Account   :${program.account}`);
     console.log(`Tenant    :${program.tenant}`);
     console.log(`Section   :${program.section}`);
     console.log(`Item      :${program.item}`);
