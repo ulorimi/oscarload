@@ -13,15 +13,18 @@ Installation:
 
     git clone https://github.com/ulorimi/oscarload
     cd oscarload
-    npm install
+    npm install -g
+
+This will make the `oscarload` command available for use.
 
 Options:
 
     -V, --version        output the version number
-    -t, --tenant [a]     Tenant RefID
-    -s, --section [a]    Section RefID
-    -i, --item [a]       Item RefID
-    -d, --directory [a]  Directory of files to load
+    -a, --account [a]    Account ID
+    -t, --tenant [t]     Tenant RefID
+    -s, --section [s]    Section RefID
+    -i, --item [i]       Item RefID
+    -d, --directory [d]  Directory of files to load
     -l, --list           Used for debugging - list the files already uploaded
     -h, --help           output usage information
 

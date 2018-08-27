@@ -12,10 +12,10 @@ const prefix = "responses/v3prod/"
 program
     .version('0.1.0')
     .option('-a, --account [a]', 'Account ID')
-    .option('-t, --tenant [a]', 'Tenant RefID')
-    .option('-s, --section [a]', 'Section RefID')
-    .option('-i, --item [a]', 'Item RefID')
-    .option('-d, --directory [a]', 'Directory of files to load')
+    .option('-t, --tenant [t]', 'Tenant RefID')
+    .option('-s, --section [s]', 'Section RefID')
+    .option('-i, --item [i]', 'Item RefID')
+    .option('-d, --directory [d]', 'Directory of files to load')
     .option('-l, --list', 'Used for debugging - list the files already uploaded')
 
 program.on('--help', function () {
@@ -48,7 +48,7 @@ function listResponses() {
             console.log(err, err.stack);
             process.exit(1);
         }
-        console.log(`Listing ${data.Contents.length} responses.`)
+        console.log(`Listing ${data.Contents.length} files.`)
         data.Contents.forEach(function (file) {
             console.log(`${file.Key} - ${file.LastModified}`);
         })
