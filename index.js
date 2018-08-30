@@ -36,8 +36,11 @@ if (program.list) {
     loadDirectory();
 }
 
+
+
 function listResponses() {
     var responseDir = path.join(prefix, program.location);
+    responseDir = responseDir.split("\\").join("\/")
     var params = {
         Bucket: bucket,
         Prefix: responseDir
@@ -71,6 +74,7 @@ function loadDirectory() {
                 }
 
                 var key = path.join(prefix, program.location, file_name);
+                key = key.split("\\").join("\/")
                 console.log("Loading:", key);
 
                 var params = {
