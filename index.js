@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const fs = require('fs')
+const fs = require('graceful-fs')
 const path = require('path')
 const AWS = require("aws-sdk")
 const s3 = new AWS.S3()
