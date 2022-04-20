@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const fs = require('graceful-fs')
+const fs = require('fs')
 const path = require('path')
 const AWS = require("aws-sdk")
 const s3 = new AWS.S3()
@@ -36,8 +36,6 @@ if (program.list) {
     loadDirectory();
 }
 
-
-
 function listResponses() {
     var responseDir = path.join(prefix, program.location);
     responseDir = responseDir.split("\\").join("\/")
@@ -59,11 +57,15 @@ function listResponses() {
 }
 
 function loadDirectory() {
-    fs.readdir(program.directory, (err, files) => {
-        files.forEach(file_name => {
+    fs.readdir(program.directory, async (err, files) => {
+        for(var i = 0; i < files.length; i++){
+            var file_name = files[i];
             var filepath = path.join(program.directory, file_name);
-
-            fs.readFile(filepath, (err, data) => {
+            var data = null;
+            try {
+                console.log("Read file")
+                data = fs.readFileSync(filepath);
+            }catch(err){
                 if (err && err.code == "EISDIR") {
                     console.log("Skipping directory:", filepath);
                     return;
@@ -72,8 +74,9 @@ function loadDirectory() {
                     console.log(err);
                     process.exit(1);
                 }
+            }
 
-                var key = path.join(prefix, program.location, file_name);
+            var key = path.join(prefix, program.location, file_name);
                 key = key.split("\\").join("\/")
                 console.log("Loading:", key);
 
@@ -83,20 +86,24 @@ function loadDirectory() {
                     Bucket: bucket,
                     Key: key
                 };
-
-                s3.putObject(params, function (err, data) {
-                    if (err) {
-                        console.log(err, err.stack);
-                        process.exit(1);
-                    }
-                    console.log(data);
-                })
-            })
-        });
+            await putObjectPromise(params);
+        }
     })
 }
 
-
+function putObjectPromise(params) {
+    return new Promise(function (resolve, reject) {
+        console.log("putting file")
+        s3.putObject(params, function (err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                reject()
+            }
+            console.log(data);
+            resolve()
+        })
+    })
+}
 
 function validateArgs(program) {
     if (!program.account) {
